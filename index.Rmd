@@ -1,6 +1,6 @@
 ---
 title: "Atlas summarizing geographic distribution and population indices of marine fish and invertebrates in the Scotian Shelf bioregion (1970-2020)"
-year: 202x
+year: 2020
 report_number: nnn
 author: |
   Daniel Ricard ^1^ 
