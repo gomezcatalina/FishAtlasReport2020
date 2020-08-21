@@ -1,72 +1,35 @@
 # Results
 
-You can add new knitr code chunks with figure and tables in any section. csasdown links all these `.Rmd` files together into one large file. Keep track of your file order insertion follow the order in `_bookdown.yml`.
+The plots generated for each species are presented in the Appendix.
 
-Here's another plot for fun:
+## Description of Figures
 
-(ref:batman) Batman!
+###Type A
+For Category L and S species: 
 
-(ref:batman-french) Homme chauve-souris!
+Spatial distribution of catch-per unit of eﬀort, (CPUE, kilograms per tow) in July-August for the Bay of Fundy and Scotian Shelf in five-year periods. Spatial interpolation between tows was done using Inverse Distance Weight (IDW). The probability of occurrence (proportion of tows with catch records for a	given species) was also reported for each five-year period.
 
-```{r batman, fig.cap=ifelse(french, "(ref:batman-french)", "(ref:batman)")}
-#' Call the Batman
-#'
-#' https://charlotte-ngs.github.io/BatmanPlot/BatmanPlotPost.html
-#'
-#' @importFrom ggplot2 ggplot stat_function geom_path aes element_blank labs
-#' @return a ggplot2 object
-batman <- function(){
-  sc <- function(x) sqrt(1 - x ^ 2)                                         # semicircle
-  el <- function(x) 3 * sc(abs(x) / 7)                                      # ellipse
-  nl <- function(x) (-1) * el(x)                                            # negative of el
-  sh <- function(x) 4.2 - 0.5 * abs(x) - 2.8 * sc(0.5 * abs(x) - 0.5)       # shoulders
-  bf <- function(x) sc(abs(2 - abs(x)) - 1) - x ^ 2 / 11 + 0.5 * abs(x) - 3 # bottom
-  cr  <- data.frame(x = c(0, 0.5, 0.8, 1), y = c(1.7, 1.7, 2.6, 0.9))       # cowl right
-  cl  <- data.frame(x = -cr$x, y = cr$y)                                    # cowl left
+For Category LR and SR:
 
-  plot_create <- function(fun, xmin, xmax){
-    rp <- stat_function(fun = fun, xlim = c(xmin,xmax))
-    lp <- stat_function(fun = fun, xlim = c(-xmax, -xmin))
-    result_plot <- list(left_plot = lp, right_plot = rp)
-    return(result_plot)
-  }
+Location of tows with catch over the period 1970-2012 (Type LR) or the period 1999-2012 (Type SR). Location of tows with catch over the period 1970-2012 (Type LR) or the period 1999-2012 (Type SR).
 
-  g <- ggplot(data.frame(x = c(-7, 7), y = c(-3, 3)), aes(x, y)) +
-    theme_bw() +
-    theme(panel.border = element_blank(),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          axis.line = element_blank(),
-          axis.text = element_blank(),
-          axis.ticks = element_blank()) +
-    labs(x = "", y = "")
+###Type B
+For Category L, S and I species:
 
-  upper_wing_plot <- plot_create(fun = el, xmin = 3, xmax = 7)
-  lower_wing_plot <- plot_create(fun = nl, xmin = 4, xmax = 7)
-  g <- g +
-    upper_wing_plot$left_plot +
-    upper_wing_plot$right_plot +
-    lower_wing_plot$left_plot +
-    lower_wing_plot$right_plot
+Stratified random estimate of CPUE (left panel), distribution indices (D75% and D95%, the minimum area containing 75% and 95% of biomass, middle panel), and distribution vs. weight per tow (right panel). The stratified random mean is plotted as a solid line with the 95% confidence region indicated by the solid grey line. The overall mean is plotted as a grey horizontal line and the overall mean plus or minus 50% of the standard deviation appear as horizontal dashed lines. In all three panels, the early years appear in blue and the last years appear in red. The predictions from a loess estimator are overlaid on the distribution indices (middle panel). The Pearson correlation coeﬃcient between D75% and biomass, and its statistical significance, are also reported in the right panel.
 
-  sh_plot <- plot_create(fun = sh, xmin = 1, xmax = 3)
-  g <- g +
-    sh_plot$left_plot +
-    sh_plot$right_plot
+###Type C.
+Length frequency distribution for NAFO divisions 4X and 4VW. A smoothed length frequency distribution is shown for each 7-year periods covered by the surveys.
 
-  bt_plot <- plot_create(fun = bf, xmin = 0, xmax = 4)
-  g <- g +
-    bt_plot$left_plot +
-    bt_plot$right_plot +
-    geom_path(data = cr,
-              na.rm = TRUE) +
-    geom_path(data = cl,
-              na.rm = TRUE)
-  g
-}
-batman()
-```
+###Type D.
+Average fish condition for all fish lengths (black dots and black line), large fish (thick gray line), and small fish (thin gray line). Fish condition is presented for NAFO divisions 4VW (right panel) and 4X (left panel).
 
-Note that this figure is numbered consecutively even though the first figure appears in a different file and section. The figures, tables, and equations are numbered **after** all the files are stitched together by `csasdown`.
+###Type E.
+Cumulative frequency distributions of depth, temperature and salinity at all sampled locations (thick solid line) and at fishing locations with catch records (thin dashed line). The depth, temperature and salinity associated with 5%, 25%, 50%, 75% and 95% of the cumulative catch is shown in tabular fashion on the bottom right panel.
+
+###Type F.
+Slopes estimates from the density-dependent habitat selection model (y axis) plotted versus the median abundance during the top 25% of years. The red box indicates strata of particular importance for a species by identifying slopes that are within a standard error from zero and that are within the top 25% of median abundance. Each stratum is identified on the plot by the last two digits of its number.
+
+
 
 
