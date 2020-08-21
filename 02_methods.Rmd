@@ -1,155 +1,83 @@
 # Methods
+## Survey Description
+The survey is conducted annually in July-August. It normally involves two separate two-week trips on board a trawl fishing vessel from the Canadian Coast Guard.
 
-To render the document in French, simply open `index.Rmd` and change this:
+A number of changes in fishing gear type and vessels used occurred since the onset of sampling activities, described in details in Clark and Emberley (2011).
 
-```
-output:
- csasdown::techreport_pdf:
-   french: false
-```
-to this:
-```
-output:
- csasdown::techreport_pdf:
-   french: true
-```
-and render as usual. You can switch back and forth at any time to see the changes in the examples. If you develop your document with this in mind you will save yourself a lot of work when you receive the translations and it's time to publish the French version. Try it now, and once in awhile when you are developing your document.
+## Sampling Design
+The summer survey covers divisions 4V, 4W and 4X of the Northwest Atlantic Fisheries Organization (NAFO) which includes the Scotian Shelf and the Bay of Fundy. The eastern limit of the survey is the Laurentian Channel and the western limit is the Fundian Channel (Figure 1).
 
-> *Note that Technical Reports are not required to be in both languages, but Science Reponses and Research Documents are.*
+The survey follows a stratified random design (Doubleday et Rivard, 1981; Lohr, 1999). The number of tows conducted in each stratum is approximately proportional to its surface area.
 
-Here is a simple figure plotted in a `knitr` code chunk. Look at the code (`02_methods.Rmd`) to see how all figure and table captions should be written to permit easy migration to French.
+The basic sampling unit of the survey is a 30-minute fishing tow conducted at a speed of 3.5 knots. This yields a distance towed of 1.75 nautical miles.
 
-(ref:testfig) Test figure with a caption will be numbered automatically.
+After each tow the catch is sorted by species and weighed. Each fish caught is then measured, and further sampling of individual fish weight, maturity status and age are performed for diﬀerent length classes. When catches exceed 300 individuals, a random sub-sample is used to obtain the length and weight measurements.
 
-(ref:testfig-french) French caption would go here once you've had it translated.
+##Taxonomic Levels
 
-```{r testfig, fig.pos="H", fig.cap = ifelse(french, "(ref:testfig-french)", "(ref:testfig)")}
-plot(cars)
-```
+Fish species caught during the surveys are identified by trained scientific personnel and their scientific name is determined. An internal species code used in the relational database is reported for each species (Losier and Waite, 1989).
 
-Here are two ways to make the same example data frame and simple `csas_table()` calls for each: 
+By its nature as a bottom trawl, the fishing gear used in the survey catches certain species better than others. To ensure that meaningful ecological information can be extracted from catch samples, we re-port the catch records for the subset of species that are caught reliably by the gear. To appear in this atlas, a species must have had a minimum of 10 observations over the duration of the survey activities. While both catch abundance and weight are recorded, the weight of species that appear at low abundances is often recorded as zero in the earlier parts of the survey when scales of appropriate precision were not available.
 
-```{r testtab, echo=TRUE}
-d <- structure(list(
-  Year = c("2018", "2019", "2020"), 
-  `Value 1` = c(1.12, 2.32, 3.67), 
-  `Value 2` = c(31.9, 2.8, 112.2)), 
-  row.names = c(NA, -3L), class = "data.frame")
-if(french){
-  names(d) <- c(rosettafish::en2fr("Year"),
-                 paste0(rosettafish::en2fr("Value"), 1),
-                 paste0(rosettafish::en2fr("Value"), 2))
-}
-csasdown::csas_table(d,
-  align = c("c", "r", "r"),
-  caption = ifelse(french,
-                   "French goes here",
-                   "Test table (data is d) with a caption will be numbered automatically."))
-```
+We divided the species caught into five categories based on 1) their taxonomic classification, 2) the number of recorded observations, and 3) their period of valid identification. Category ”L”, for ”long”, was assigned to species that have more than 1000 records since 1970 and have been consistently identified since the onset of the survey. Category ”S”, for ”short”, was assigned to invertebrate species that were consistently sampled only since 1999, as discussed in Tremblay et al. (2007)). Category ”I”, for ”intermediate”, was assigned to species that had been 1000 and 200 catch records. Rare and elusive species (those with less than 200 catch records over the du-ration of the survey) are also reported but to a lower level of analytical details (Category ”LR”, for ”long rare”, and category ”SR”, for ”short rare”).
 
-```{r testtab2, echo=TRUE}
-d1 <- tribble(
-  ~Year, ~`Value 1`, ~`Value 2`,
-   2018,       1.12,       31.9,
-   2019,       2.32,        2.8,
-   2020,       3.67,      112.2)
-if(french){
-  names(d1) <- c(rosettafish::en2fr("Year"),
-                 paste0(rosettafish::en2fr("Value"), 1),
-                 paste0(rosettafish::en2fr("Value"), 2))
-}
-csasdown::csas_table(d1,
-  align = c("c", "r", "r"),
-  caption = ifelse(french,
-                   "French goes here",
-                   "Test table (data is d1) with a caption will be numbered automatically."))
-```
+The list of taxa covered in this document is presented in phylogenetic order (Nelson et al., 2004) in Table 4. To ensure concordance with authoritative taxonomic information, the AphiaID from the World Register of Marine Species is also provided in Table 4 (Appeltans et al., 2012).
 
-Notice the difference in how the English and French captions are generated for tables compared to the way they are generated for figures.
+##Analyses
 
-To reference the tables and figures, just place code like this for tables: `\@ref(tab:testtab)` inline in text (`testtab` is the knitr code chunk name) and like this for figures: `\@ref(fig:testfig)`. Note the difference in the tag preceeding the colon in those code snippets, `tab` for table references and `fig` for figure references (See Table \@ref(tab:ref-tab) for all types). Here are the table references so far in this document: Table \@ref(tab:testtab) and Table \@ref(tab:testtab2), and the figure reference: Figure \@ref(fig:testfig). The numbers are clickable.
+The Oracle relational database where all data are stored was accessible from the Bedford Institute of Oceanography in Dartmouth, Nova Scotia. Structured Query Language (SQL) is used to extract the data from the production server and to create the data products used in all subsequent analyses. Catch records classified as ”valid” (i.e. a representative tow without damage to the net) are used in the current analyses. To make the available samples comparable, catch number and weight for each species was standardized for the distance towed.
 
-Next we show a more complicated table with grouped rows and text wrapping. The code becomes more difficult when you want to make non-trivial tables, so it is recommended to think about how to keep tables as simple as possible to avoid this kind of code if you're not comfortable with it. 
+All data processing and analyses were conducted using the R software (R Core Team, 2013) using packages RODBC (Ripley and Lapsley, 2012), PBSmapping (Schnute et al., 2012), spatstat (Baddeley and Turner, 2005), gstat (Pebesma, 2004), maptools (Lewin-Koh et al., 2012), rgeos (Bivand and Rundel, 2012), xtable (Dahl, 2012) and MASS (Venables and Ripley, 2002). Figures 1, 2 and 3 were produced using the Generic Mapping Tools (Wessel and Smith, 1991).
 
-The code below works like this:
+###Geographic distribution of catches
 
-1. `read_csv(file.path("data", "multirow.csv"))` - reads data in from the data file
-2. `mutate_all(function(x){gsub("\\\\n", "\n", x)})` -  changes `\\n` to `\n` in all columns. Even though the data file contains only `\n`, the `readr::read_csv()` function changes these to `\\n`. The extra backslashes are required to escape the two, so four are needed
-3. `mutate_all(kableExtra::linebreak)` -  replaces `\n`'s in all columns with a special LaTeX command that causes newlines to be created
-4. `mutate_all(function(x){gsub("%", "\\\\%", x)})` - replaces percent signs with an escaped version in all columns, as they are special characters in LaTeX
-5. `mutate_all(function(x){gsub("emph\\{", "\\\\emph\\{", x)})` - replaces `emph{` with an escaped version in all columns so that LaTeX can run it as its own command `emph{}` (italicization)
-6. Remove all NA's from the grouping column, replacing them with empty strings so `NA` doesn't appear in the output table
-7. `csas_table()` command - makes the table from the input data
-8. The 5 `kableExtra::row_spec(XX, hline_after = TRUE)` commands - insert a horizontal line across the whole table after each group.
-9. The lines with `kableExtra::row_spec(1, extra_latex_after = "\\cmidrule(l){2-2}") %>%` commands - insert a horizontal line across the second column only (`{2-2}` signifies the column range)
-10. The 2 `kableExtra::column_spec(XX, width = "XXem")` commands - change the width of the column to a set value. This has the effect of wrapping the text so it doesn't run off the page
+Spatial interpolation of catch biomass (kg/tow) or abundance (number/tow) was done using a weighting inversely proportional to the distance, using function ”idw” of the spatstat R package (Baddeley and Turner, 2005).
 
-Understanding how this table works will take you a long way in LaTex table generation. For example you could make any text bold that you want by using `\textbf{}` instead of `\emph{}`. To do that, you would just change the `emph` in the data file (`multirow.csv`) to `textbf` and add a the following new line into the code below, right before or after the line that deals with `emph`:
+###Abundance and biomass indices
 
-`mutate_all(function(x){gsub("textbf\\{", "\\\\textbf\\{", x)}) %>%`
+For each species, stratified random estimates of catch abundance and biomass (Smith, 1996) are computed for each year. Yearly estimates of the standard error were also computed.
 
-```{r multi-row-table, echo=TRUE}
-read_csv(file.path("data", "multirow.csv")) %>% 
-  mutate_all(function(x){gsub("\\\\n", "\n", x)}) %>% 
-  mutate_all(kableExtra::linebreak) %>%
-  mutate_all(function(x){gsub("%", "\\\\%", x)}) %>% 
-  mutate_all(function(x){gsub("emph\\{", "\\\\emph\\{", x)}) %>% 
-  mutate(`Overarching goal` = ifelse(is.na(`Overarching goal`),
-                                     "",
-                                     `Overarching goal`)) %>% 
-  csas_table(format = "latex",
-             escape = FALSE,
-             font_size = 11,
-             caption = ifelse(french,
-                              "French goes here",
-                              "Goals and performance metrics")) %>%
-  kableExtra::row_spec(1, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(2, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(3, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(4, hline_after = TRUE) %>% 
-  kableExtra::row_spec(5, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(6, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(7, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(8, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(9, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(10, hline_after = TRUE) %>% 
-  kableExtra::row_spec(11, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(12, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(13, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(14, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(15, hline_after = TRUE) %>% 
-  kableExtra::row_spec(16, hline_after = TRUE) %>% 
-  kableExtra::row_spec(17, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(18, extra_latex_after = "\\cmidrule(l){2-2}") %>% 
-  kableExtra::row_spec(19, hline_after = TRUE) %>% 
-  kableExtra::column_spec(1, width = "15em") %>%
-  kableExtra::column_spec(2, width = "30em")
+###Distribution indices
 
-```
+For each Category L, I and S fish species, the minimum area required to account for 75% and 95% of the total biomass or abundance were computed (D75% and D95%). These measures of distributions were computed for each year by using the Lorenz curve of mean stratum-level catch estimates and the area of occupied strata, using methods described in Swain and Sinclair (1994) and Swain and Morin (1996).
 
-While building complex tables you must take an iterative approach once you've made the basic table and want to add detailed elements: add one element; test; fix errors; fix logic/design issues; repeat. In the construction of Table \@ref(tab:multi-row-table), one line of code at a time was added with the results checked and made sure to be correct before adding the next line of code.
+###Length frequencies
 
-On the following pages we have an example of a long and wide table which is in landscape mode. This is accomplished by setting `landscape = TRUE` in the `csas_table()` call. You can change the font size if the table it still too large and overlaps the header and footer lines.
+The length frequency distribution of catch is tabulated for each seven-year period (1970-2009), and last ten-year period (2010-2020).
 
-\clearpage
+###Length-weight relationship and condition factor
 
-<!-- clearpage ends the page, and also dumps out all floats.
-Floats are things like tables and figures. -->
-```{r widelong, results = "asis"}
-yrs <- 1:45
-ages <- 1:15
-widelong <- matrix(round(rnorm(length(yrs) * length(ages), 20), 4),
-  nr = length(yrs),
-  nc = length(ages),
-  dimnames = list(year = yrs, age = ages))
-widelong_df <- data.frame(cbind(yrs, widelong))
+The relationship between the weight and the length of fish was estimated using the following non-linear isometric relationship:
 
-csasdown::csas_table(widelong_df,
-  col.names = c("Year", as.character(ages)),
-  caption = "A long and wide table",
-  format = "latex",
-  landscape = TRUE,
-  font_size = 8)
-```
+\begin{eqnarray*}\label{eqLengthWeight}
+W = \alpha L ^\beta  
+\\
+\end{eqnarray*}
 
-\clearpage
+where W is the total weight (g), L is the length (cm), and, $\alpha$ and $\beta$ are the parameters to be estimated. 
+
+Average fish condition (C) is computed as:
+
+\begin{eqnarray*}\label{eqCondition}
+C = \frac{W}{\alpha L ^\beta}  
+\\
+\end{eqnarray*}
+
+###Depth, temperature and salinity distribution of catches
+
+For each category L species, We followed the methods developed by Perry and Smith (1994) and generated cumulative frequency distributions of depth, temperature and salinity of survey catches.
+
+###Density-dependent habitat selection
+
+We follow the methods of Myers and Stokes (1989) to evaluate how fish abundance in each stra-tum varied with overall temporal fluctuations of pop-ulation abundance.
+
+For each category L species, we fitted a model of the relationship between stratum-level density and overall abundance (the yearly stratified random esti-mate of abundance, defined above). To properly use the observations of zero catch while accounting for the logarithmic distribution of catch abundance, we implemented the model as a generalised linear using a log link and a Poisson error distribution:
+
+\begin{eqnarray*}\label{eqHabitat Selection}
+Y_{h,i} = \alpha_{h} Y_{i}^{\beta_h}
+\\
+\end{eqnarray*}
+
+where, $y_{h,i}$ is the average abundance of stratum $h$ in year $i$, and $\alpha_{h,i}$ and  $\beta_{h,i}$ are the fitted parameters. The estimated parameter $\beta_{h,i}$ is referred to as the "slope parameter" and indicates whether stratum-level density is positively ($\beta_{h,i} <= 0$), negatively ($\beta_{h,i} >= 0$) or negligibly ($\beta_{h,i} \approx 0$) related to population abundance.
+
+To estimate the suitability of each stratum, the median abundance observed during the years that are in the top 25% of yearly estimates is used. We com-bine the slope parameter estimates from the above model with the median abundance to identify strata that have consistently high abundance and whose local density is weakly related to fluctuation in population abundance ($\beta_{h,i} \approx 0$). Preferred strata are identified for each category L species.
